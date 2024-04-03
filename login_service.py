@@ -4,9 +4,11 @@ import json
 
 app = FastAPI()
 
+
 class Login(BaseModel):
     username: str
     password: str
+
 
 @app.post("/login/")
 async def login(login: Login):
@@ -20,6 +22,7 @@ async def login(login: Login):
         return {"status": "sucesso", "mensagem": "Usuário autenticado"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/login/")
 async def get_login_info():

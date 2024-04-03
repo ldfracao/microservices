@@ -1,13 +1,28 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:8003"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 class Cart(BaseModel):
     user_id: int
     produto_id: int
     quantidade: int
+
 
 @app.post("/carrinho/{user_id}/add")
 async def add_carrinho(cart: Cart):
@@ -23,6 +38,7 @@ async def add_carrinho(cart: Cart):
         return {"status": "sucesso", "mensagem": "Produto adicionado ao carrinho"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/carrinho/{user_id}/add")
 async def obter_carrinho():

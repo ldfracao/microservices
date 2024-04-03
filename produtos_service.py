@@ -4,10 +4,12 @@ import json
 
 app = FastAPI()
 
+
 class Produto(BaseModel):
     id: int
     nome: str
     preco: float
+
 
 @app.post("/produtos")
 async def save_produtos(produtos: Produto):
@@ -18,10 +20,11 @@ async def save_produtos(produtos: Produto):
             "preco": produtos.preco
         }
         with open("produtos_data.txt", "w") as file:
-                json.dump(produtos_data, file)
+            json.dump(produtos_data, file)
         return {"status": "sucesso", "mensagem": "Produtos salvos no arquivo"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/produtos")
 async def list_produtos():
